@@ -49,7 +49,7 @@ export class CommentsService {
   }
 
   async findAll(): Promise<Comment[]> {
-    return await this.commentRepository.find();
+    return await this.commentRepository.find({ relations: ['user', 'post'] });
   }
 
   async findCommentById(id: number): Promise<Comment | null> {
