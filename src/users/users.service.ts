@@ -33,4 +33,9 @@ export class UsersService {
     const updatedUser = { ...user, ...updateUserDto };
     return await this.usersRepository.save(updatedUser);
   }
+
+  async delete(id: number) {
+    await this.usersRepository.delete(id);
+    return { message: 'Successfully removed!' };
+  }
 }
