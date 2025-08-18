@@ -9,13 +9,13 @@ import {
 export class CreatePostDto {
   @IsString()
   @MinLength(5)
-  @MaxLength(50)
+  @MaxLength(100)
   @IsNotEmpty()
   title: string;
 
   @IsString()
   @MinLength(10)
-  @MaxLength(500)
+  @MaxLength(1000)
   content: string;
 
   @IsNotEmpty()
