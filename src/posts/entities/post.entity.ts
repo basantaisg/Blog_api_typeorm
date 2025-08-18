@@ -10,7 +10,7 @@ import {
 @Entity()
 export class Post {
   @PrimaryGeneratedColumn()
-  postId: number;
+  id: number;
 
   @Column({ type: 'text' })
   title: string;

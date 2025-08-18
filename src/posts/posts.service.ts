@@ -4,6 +4,7 @@ import { Post } from './entities/post.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { CreatePostDto } from './dtos/create-post.dto';
+import { UpdatePostDto } from './dtos/update-post.dto';
 
 @Injectable()
 export class PostsService {
@@ -16,7 +17,7 @@ export class PostsService {
   ) {}
 
   async create(createPostDto: CreatePostDto): Promise<Post> {
-    const user = this.userRepository.findOne({
+    const user = await this.userRepository.findOne({
       where: { id: createPostDto.userId },
     });
 
@@ -25,12 +26,40 @@ export class PostsService {
         `User with id ${createPostDto.userId} Not Found!`,
       );
 
-    const post = this.postRepository.create(createPostDto);
+    const post = this.postRepository.create({
+      title: createPostDto.title,
+      content: createPostDto.content,
+      user,
+    });
 
     return await this.postRepository.save(post);
   }
 
   async findAll(): Promise<Post[]> {
     return this.postRepository.find({ relations: ['user'] });
+  }
+
+  async findOneById(id: number) {
+    const post = await this.postRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+    if (!post) throw new NotFoundException(`Post with id ${id} not found!`);
+    return post;
+  }
+
+  async update(id: number, updatePostDto: UpdatePostDto) {
+    const post = await this.findOneById(id);
+
+    if (!post) throw new NotFoundException(`post with id: ${id} Not exists!`);
+
+    const updatedPost = { ...post, ...updatePostDto };
+
+    return this.postRepository.save(updatedPost);
+  }
+
+  async delete(id: number) {
+    await this.postRepository.delete({ id });
+    return { message: 'Post deleted successfully!' };
   }
 }
