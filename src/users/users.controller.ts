@@ -9,7 +9,6 @@ import {
   Post,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 
 @Controller('users')
@@ -24,11 +23,6 @@ export class UsersController {
   @Get(':id')
   async findOneById(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.findOneById(id);
-  }
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
   }
 
   @Patch(':id')
