@@ -54,4 +54,13 @@ export class AuthService {
 
     return validUser;
   }
+
+  async setRefreshToken(userId: number, refreshToken: string) {
+    const hashedToken = await bcrypt.hash(refreshToken, 10);
+    return this.usersService.update(userId, { refreshToken: hashedToken });
+  }
+
+  async removeRefreshToken(userId: number) {
+    return this.usersService.update(userId, { refreshToken: null });
+  }
 }

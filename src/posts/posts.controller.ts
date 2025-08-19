@@ -6,10 +6,13 @@ import {
   Param,
   Patch,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dtos/create-post.dto';
 import { UpdatePostDto } from './dtos/update-post.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('posts')
 export class PostsController {
@@ -21,8 +24,9 @@ export class PostsController {
   }
 
   @Get()
-  async findAll() {
-    return this.postsService.findAll();
+  @UseGuards(AuthGuard('jwt'))
+  async findAll(@Request() req) {
+    return this.postsService.findAll(req.user.userId);
   }
 
   @Get(':id')

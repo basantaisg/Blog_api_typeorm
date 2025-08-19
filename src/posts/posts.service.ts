@@ -35,8 +35,11 @@ export class PostsService {
     return await this.postRepository.save(post);
   }
 
-  async findAll(): Promise<Post[]> {
-    return this.postRepository.find({ relations: ['user'] });
+  async findAll(userId: number): Promise<Post[]> {
+    return this.postRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
   }
 
   async findOneById(id: number) {
